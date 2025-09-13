@@ -19,12 +19,6 @@ class PostController extends Controller
         $this->postRepository = $postRepository;
     }
 
-    /**
-     * Display a listing of posts
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->get('per_page', 15);
@@ -57,12 +51,6 @@ class PostController extends Controller
         return $this->paginatedResponse($postData, 'Posts listados com sucesso.');
     }
 
-    /**
-     * Store a newly created post
-     *
-     * @param PostRequest $request
-     * @return JsonResponse
-     */
     public function store(PostRequest $request): JsonResponse
     {
         try {
@@ -89,12 +77,6 @@ class PostController extends Controller
         }
     }
 
-    /**
-     * Display the specified post
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
     public function show(int $id): JsonResponse
     {
         $post = $this->postRepository->find($id);
@@ -117,13 +99,6 @@ class PostController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified post
-     *
-     * @param PostRequest $request
-     * @param int $id
-     * @return JsonResponse
-     */
     public function update(PostRequest $request, int $id): JsonResponse
     {
         try {
@@ -158,12 +133,6 @@ class PostController extends Controller
         }
     }
 
-    /**
-     * Remove the specified post
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
     public function destroy(int $id): JsonResponse
     {
         $deleted = $this->postRepository->delete($id);
@@ -175,4 +144,3 @@ class PostController extends Controller
         return $this->successResponse(null, 'Post removido com sucesso.');
     }
 }
-

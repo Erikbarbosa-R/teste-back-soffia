@@ -23,12 +23,6 @@ class AuthController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * Login user
-     *
-     * @param LoginRequest $request
-     * @return JsonResponse
-     */
     public function login(LoginRequest $request): JsonResponse
     {
         $credentials = $request->only('email', 'password');
@@ -51,12 +45,6 @@ class AuthController extends Controller
         ], 'Login realizado com sucesso.');
     }
 
-    /**
-     * Register new user
-     *
-     * @param RegisterRequest $request
-     * @return JsonResponse
-     */
     public function register(RegisterRequest $request): JsonResponse
     {
         try {
@@ -83,11 +71,6 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * Logout user
-     *
-     * @return JsonResponse
-     */
     public function logout(): JsonResponse
     {
         try {
@@ -98,15 +81,10 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * Get authenticated user
-     *
-     * @return JsonResponse
-     */
     public function me(): JsonResponse
     {
         $user = Auth::user();
-        
+
         return $this->successResponse([
             'id' => $user->id,
             'nome' => $user->nome,
@@ -116,11 +94,6 @@ class AuthController extends Controller
         ]);
     }
 
-    /**
-     * Refresh token
-     *
-     * @return JsonResponse
-     */
     public function refresh(): JsonResponse
     {
         try {
@@ -131,7 +104,3 @@ class AuthController extends Controller
         }
     }
 }
-
-
-
-

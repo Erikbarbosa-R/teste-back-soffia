@@ -20,12 +20,6 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * Display a listing of users
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function index(Request $request): JsonResponse
     {
         $perPage = $request->get('per_page', 15);
@@ -44,12 +38,6 @@ class UserController extends Controller
         return $this->paginatedResponse($userData, 'Usuários listados com sucesso.');
     }
 
-    /**
-     * Store a newly created user
-     *
-     * @param UserRequest $request
-     * @return JsonResponse
-     */
     public function store(UserRequest $request): JsonResponse
     {
         try {
@@ -74,12 +62,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Display the specified user
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
     public function show(int $id): JsonResponse
     {
         $user = $this->userRepository->find($id);
@@ -97,13 +79,6 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified user
-     *
-     * @param UserRequest $request
-     * @param int $id
-     * @return JsonResponse
-     */
     public function update(UserRequest $request, int $id): JsonResponse
     {
         try {
@@ -132,12 +107,6 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Remove the specified user
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
     public function destroy(int $id): JsonResponse
     {
         $deleted = $this->userRepository->delete($id);
@@ -149,7 +118,3 @@ class UserController extends Controller
         return $this->successResponse(null, 'Usuário removido com sucesso.');
     }
 }
-
-
-
-

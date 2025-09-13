@@ -9,13 +9,6 @@ use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 
 class JwtMiddleware extends BaseMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
-     */
     public function handle(Request $request, Closure $next)
     {
         try {
@@ -33,7 +26,3 @@ class JwtMiddleware extends BaseMiddleware
         return $next($request);
     }
 }
-
-
-
-
