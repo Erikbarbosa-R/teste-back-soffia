@@ -9,9 +9,21 @@ services:
     container_name: cms-api-app
     restart: unless-stopped
     working_dir: /var/www
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=pgsql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_DATABASE=Soffia-database
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=Erikbarbosa12
+      - JWT_SECRET=testeeee
     volumes:
       - ./:/var/www
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    depends_on:
+      - db
     networks:
       - cms-api-network
 
