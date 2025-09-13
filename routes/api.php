@@ -7,11 +7,11 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 
 Route::get('health', function () {
-    return response()->json([
-        'status' => 'ok',
-        'timestamp' => now(),
-        'service' => 'CMS API'
-    ]);
+    return response()->json(['status' => 'ok'], 200);
+});
+
+Route::get('ping', function () {
+    return response()->json(['pong' => true], 200);
 });
 
 Route::prefix('auth')->group(function () {
