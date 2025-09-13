@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "php -S 0.0.0.0:${PORT:-8000} -t public",
+    "startCommand": "php -S 0.0.0.0:$PORT -t public",
     "healthcheckPath": "/api/ping",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
