@@ -21,6 +21,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copiar arquivos
 COPY . /var/www
 
+# Copiar script de entrada
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Definir permissões
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 755 /var/www/storage
@@ -35,9 +39,6 @@ RUN if [ ! -f .env ]; then cp .env.example .env; fi
 RUN php artisan key:generate --force
 RUN php artisan jwt:secret --force
 
-# Executar migrações
-RUN php artisan migrate --force
-
 EXPOSE 9000
 
-CMD ["php-fpm"]
+ENTRYPOINT ["docker-entrypoint.sh"]
