@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: teste-local
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=testing
+      - APP_DEBUG=true
+      - DB_CONNECTION=sqlite
+      - DB_DATABASE=/var/www/database/database.sqlite
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+    command: php -S 0.0.0.0:8000 -t public
