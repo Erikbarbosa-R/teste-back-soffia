@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.railway
+    image: teste-back-soffia-app-railway
+    container_name: teste-railway
+    restart: unless-stopped
+    working_dir: /var/www
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DB_CONNECTION=pgsql
+      - DB_HOST=yamabiko.proxy.rlwy.net
+      - DB_PORT=23644
+      - DB_DATABASE=railway
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=YbISVzRIeLMsfuvNDLUHkyAYRIbZWOdS
+      - JWT_SECRET=testeeee
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./:/var/www
+    networks:
+      - railway-network
+
+networks:
+  railway-network:
+    driver: bridge
