@@ -7,7 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 
 Route::get('health', function () {
-    return response()->json(['status' => 'ok'], 200);
+    return response()->json(['status' => 'ok', 'timestamp' => now()], 200);
 });
 
 Route::get('ping', function () {
