@@ -6,6 +6,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 
+Route::get('health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now(),
+        'service' => 'CMS API'
+    ]);
+});
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
