@@ -7,7 +7,12 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     zip \
-    unzip
+    unzip \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar extensões PHP necessárias
+RUN docker-php-ext-install pdo pdo_pgsql
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -25,6 +30,14 @@ RUN if [ ! -f .env ]; then cp .env.example .env; fi
 RUN php artisan key:generate --force
 RUN php artisan jwt:secret --force
 
-EXPOSE 8000
+# Configurar permissões
+RUN chmod -R 775 /var/www/storage
+RUN chmod -R 775 /var/www/bootstrap/cache
+RUN chmod -R 775 /var/www/public
+RUN mkdir -p /var/www/storage/api-docs
+RUN chmod -R 775 /var/www/storage/api-docs
 
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+EXPOSE 8080
+
+# Comando simples para iniciar o servidor
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]

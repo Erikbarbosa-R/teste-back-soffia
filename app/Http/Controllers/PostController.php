@@ -150,6 +150,7 @@ class PostController extends Controller
         try {
             $postData = $request->validated();
             $postData['author_id'] = $postData['author'];
+            unset($postData['author']); // Remove o campo author do array
 
             $post = $this->postRepository->create($postData);
 
@@ -167,7 +168,7 @@ class PostController extends Controller
             ], 'Post criado com sucesso.', 201);
 
         } catch (\Exception $e) {
-            return $this->errorResponse('Erro ao criar post.', 400);
+            return $this->errorResponse('Erro ao criar post: ' . $e->getMessage(), 400);
         }
     }
 

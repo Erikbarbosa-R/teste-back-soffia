@@ -77,9 +77,13 @@ Route::get('/health', function () {
     return response()->json(['status' => 'healthy'], 200);
 });
 
-// Rota de fallback para documentação
+// Documentação da API
 Route::get('/docs', function () {
-    return redirect('/api/documentation');
+    return response()->file(public_path('api-docs.html'));
+});
+
+Route::get('/documentation', function () {
+    return response()->file(public_path('api-docs.html'));
 });
 
 Route::get('/swagger', function () {

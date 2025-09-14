@@ -1,0 +1,555 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "CMS API",
+    "description": "API para sistema de gerenciamento de conteúdo",
+    "version": "1.0.0",
+    "contact": {
+      "name": "CMS API Support",
+      "email": "admin@cms.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api",
+      "description": "Servidor Local"
+    },
+    {
+      "url": "https://teste-back-soffia-production.up.railway.app/api",
+      "description": "Servidor Railway"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Verifica se a API está funcionando",
+        "tags": ["Utilitários"],
+        "responses": {
+          "200": {
+            "description": "API funcionando",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "ok"
+                    },
+                    "timestamp": {
+                      "type": "string",
+                      "example": "2023-01-01T00:00:00.000000Z"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ping": {
+      "get": {
+        "summary": "Ping",
+        "description": "Resposta simples de ping",
+        "tags": ["Utilitários"],
+        "responses": {
+          "200": {
+            "description": "Pong",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pong": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "description": "Autentica um usuário e retorna token JWT",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email", "password"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "admin@cms.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string",
+                      "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+                    },
+                    "token_type": {
+                      "type": "string",
+                      "example": "bearer"
+                    },
+                    "expires_in": {
+                      "type": "integer",
+                      "example": 3600
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid"
+                        },
+                        "nome": {
+                          "type": "string",
+                          "example": "Admin"
+                        },
+                        "email": {
+                          "type": "string",
+                          "example": "admin@cms.com"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciais inválidas"
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Registro",
+        "description": "Registra um novo usuário",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome", "email", "password"],
+                "properties": {
+                  "nome": {
+                    "type": "string",
+                    "example": "João Silva"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "joao@email.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  },
+                  "telefone": {
+                    "type": "string",
+                    "example": "11999999999"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado com sucesso"
+          },
+          "422": {
+            "description": "Dados inválidos"
+          }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Perfil do Usuário",
+        "description": "Retorna informações do usuário autenticado",
+        "tags": ["Autenticação"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Informações do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "nome": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "telefone": {
+                      "type": "string"
+                    },
+                    "is_valid": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Token inválido"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Listar Usuários",
+        "description": "Retorna lista de usuários",
+        "tags": ["Usuários"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários"
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar Usuário",
+        "description": "Cria um novo usuário",
+        "tags": ["Usuários"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "201": {
+            "description": "Usuário criado"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Buscar Usuário",
+        "description": "Retorna um usuário específico",
+        "tags": ["Usuários"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário encontrado"
+          },
+          "404": {
+            "description": "Usuário não encontrado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar Usuário",
+        "description": "Atualiza um usuário",
+        "tags": ["Usuários"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar Usuário",
+        "description": "Remove um usuário",
+        "tags": ["Usuários"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Usuário removido"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "get": {
+        "summary": "Listar Posts",
+        "description": "Retorna lista de posts",
+        "tags": ["Posts"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Lista de posts"
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar Post",
+        "description": "Cria um novo post",
+        "tags": ["Posts"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "201": {
+            "description": "Post criado"
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "get": {
+        "summary": "Buscar Post",
+        "description": "Retorna um post específico",
+        "tags": ["Posts"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post encontrado"
+          },
+          "404": {
+            "description": "Post não encontrado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar Post",
+        "description": "Atualiza um post",
+        "tags": ["Posts"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post atualizado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar Post",
+        "description": "Remove um post",
+        "tags": ["Posts"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Post removido"
+          }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "summary": "Listar Tags",
+        "description": "Retorna lista de tags",
+        "tags": ["Tags"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Lista de tags"
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar Tag",
+        "description": "Cria uma nova tag",
+        "tags": ["Tags"],
+        "security": [{"bearerAuth": []}],
+        "responses": {
+          "201": {
+            "description": "Tag criada"
+          }
+        }
+      }
+    },
+    "/tags/{id}": {
+      "get": {
+        "summary": "Buscar Tag",
+        "description": "Retorna uma tag específica",
+        "tags": ["Tags"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag encontrada"
+          },
+          "404": {
+            "description": "Tag não encontrada"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar Tag",
+        "description": "Atualiza uma tag",
+        "tags": ["Tags"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag atualizada"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar Tag",
+        "description": "Remove uma tag",
+        "tags": ["Tags"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Tag removida"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Utilitários",
+      "description": "Endpoints utilitários"
+    },
+    {
+      "name": "Autenticação",
+      "description": "Endpoints de autenticação"
+    },
+    {
+      "name": "Usuários",
+      "description": "Gerenciamento de usuários"
+    },
+    {
+      "name": "Posts",
+      "description": "Gerenciamento de posts"
+    },
+    {
+      "name": "Tags",
+      "description": "Gerenciamento de tags"
+    }
+  ]
+}

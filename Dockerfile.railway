@@ -41,6 +41,9 @@ RUN chmod -R 775 /var/www/storage/api-docs
 COPY start-railway.sh /var/www/start.sh
 RUN chmod +x /var/www/start.sh
 
+# Verificar se o arquivo foi copiado
+RUN ls -la /var/www/start.sh
+
 EXPOSE 8080
 
-CMD ["/var/www/start.sh"]
+CMD ["bash", "/var/www/start.sh"]
