@@ -96,9 +96,9 @@ docker-compose exec app php artisan db:seed --class=CmsSeeder
 ```
 
 ### 3. Acessar a aplicação
-- **API**: http://localhost:8000
-- **Documentação Swagger**: http://localhost:8000/api/documentation
-- **pgAdmin**: http://localhost:8080
+- **API**: http://localhost:3000
+- **Documentação Swagger**: http://localhost:3000/api/documentation
+- **pgAdmin**: http://localhost:8000
 
 ## 📚 Documentação da API
 

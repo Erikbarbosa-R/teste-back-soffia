@@ -47,11 +47,11 @@ php artisan migrate --force || echo "Migrations já executadas"\n\
 # Executar seeders se necessário\n\
 php artisan db:seed --class=CmsSeeder --force || echo "Seeders já executados"\n\
 \n\
-echo "Iniciando servidor na porta 8080..."\n\
-php -S 0.0.0.0:8080 -t public' > /var/www/start.sh
+echo "Iniciando servidor na porta 8000..."\n\
+php -S 0.0.0.0:8000 -t public' > /var/www/start.sh
 
 RUN chmod +x /var/www/start.sh
 
-EXPOSE 8080
+EXPOSE 8000
 
 CMD ["/var/www/start.sh"]
