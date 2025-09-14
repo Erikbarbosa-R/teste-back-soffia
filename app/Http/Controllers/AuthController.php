@@ -54,23 +54,11 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request): JsonResponse
     {
-        \Log::info('=== REGISTER REQUEST START ===');
-        \Log::info('Request data:', $request->all());
-        
         try {
-            \Log::info('Validating request...');
             $userData = $request->validated();
-            \Log::info('Request validated successfully:', $userData);
-            
-            \Log::info('Hashing password...');
             $userData['password'] = Hash::make($userData['password']);
-            \Log::info('Password hashed');
-
-            \Log::info('Creating user via repository...');
             $user = $this->userRepository->create($userData);
-            \Log::info('User created successfully:', ['id' => $user->id, 'email' => $user->email]);
 
-            \Log::info('=== REGISTER SUCCESS ===');
             return $this->successResponse([
                 'user' => [
                     'id' => $user->id,
@@ -83,10 +71,6 @@ class AuthController extends Controller
             ], 'Usuário registrado com sucesso.', 201);
 
         } catch (\Exception $e) {
-            \Log::error('=== REGISTER ERROR ===');
-            \Log::error('Error message:', ['message' => $e->getMessage()]);
-            \Log::error('Error trace:', ['trace' => $e->getTraceAsString()]);
-            \Log::error('Request data:', $request->all());
             return $this->errorResponse('Erro ao cadastrar o usuário. Verifique os dados fornecidos.', 400);
         }
     }
@@ -104,7 +88,6 @@ class AuthController extends Controller
     public function me(): JsonResponse
     {
         try {
-            // Usar JWTAuth diretamente para evitar problemas com o AuthManager
             $user = JWTAuth::parseToken()->authenticate();
 
             if (!$user) {

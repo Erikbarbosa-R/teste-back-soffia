@@ -7,14 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
-        // Habilitar extensão UUID no PostgreSQL
         DB::statement('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"');
 
         Schema::create('users', function (Blueprint $table) {
@@ -30,11 +24,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('users');
