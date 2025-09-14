@@ -5,61 +5,48 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\CommentController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\DashboardController;
 
+/**
+ * @OA\Get(
+ *     path="/api/health",
+ *     summary="Health Check",
+ *     description="Verifica se a API está funcionando",
+ *     tags={"Utilitários"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="API funcionando",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="ok"),
+ *             @OA\Property(property="timestamp", type="string", example="2023-01-01T00:00:00.000000Z")
+ *         )
+ *     )
+ * )
+ */
 Route::get('health', function () {
     return response()->json(['status' => 'ok', 'timestamp' => now()], 200);
 });
 
+/**
+ * @OA\Get(
+ *     path="/api/ping",
+ *     summary="Ping",
+ *     description="Resposta simples de ping",
+ *     tags={"Utilitários"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Pong",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="pong", type="boolean", example=true)
+ *         )
+ *     )
+ * )
+ */
 Route::get('ping', function () {
     return response()->json(['pong' => true], 200);
 });
 
-Route::post('test-register', function (Request $request) {
-    return response()->json([
-        'message' => 'Teste de register funcionando',
-        'data' => $request->all()
-    ], 200);
-});
-
-Route::post('test-validation', function (Request $request) {
-    try {
-        $validated = $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
-            'telefone' => 'nullable|string|max:20',
-        ]);
-        
-        return response()->json([
-            'message' => 'Validação funcionando',
-            'validated' => $validated
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'Erro na validação',
-            'error' => $e->getMessage()
-        ], 400);
-    }
-});
-
-Route::post('test-simple', function (Request $request) {
-    return response()->json([
-        'message' => 'Rota simples funcionando',
-        'method' => $request->method(),
-        'content_type' => $request->header('Content-Type'),
-        'data' => $request->all()
-    ], 200);
-});
-
-Route::get('test-auth', function (Request $request) {
-    return response()->json([
-        'message' => 'Teste de autenticação',
-        'headers' => $request->headers->all(),
-        'auth_header' => $request->header('Authorization'),
-        'user' => auth('api')->user()
-    ], 200);
-});
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
@@ -74,9 +61,15 @@ Route::middleware(['jwt.auth'])->group(function () {
     });
 
     Route::apiResource('users', UserController::class);
-
     Route::apiResource('posts', PostController::class);
+    Route::apiResource('tags', TagController::class);
 
     Route::post('posts/{post}/comments', [PostController::class, 'addComment']);
     Route::delete('posts/{post}/comments/{comment}', [PostController::class, 'deleteComment']);
+
+    // Dashboard routes
+    Route::prefix('dashboard')->group(function () {
+        Route::get('stats', [DashboardController::class, 'stats']);
+        Route::get('activity', [DashboardController::class, 'activity']);
+    });
 });

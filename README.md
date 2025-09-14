@@ -1,139 +1,86 @@
 # CMS API - Sistema de Gerenciamento de Conteúdo
 
-Uma API REST completa para gerenciamento de postagens com títulos, autores, conteúdos e tags, desenvolvida em Laravel 9 com autenticação JWT.
+Uma API REST completa para gerenciamento de conteúdo com autenticação JWT, desenvolvida em Laravel 9.
 
-## 📋 Funcionalidades
+## 🎯 Funcionalidades Principais
 
-### ✅ Requisitos Obrigatórios Implementados
+### ✅ Sistema de Autenticação
+- **JWT Authentication** - Tokens seguros para autenticação
+- **Registro/Login/Logout** - Fluxo completo de autenticação
+- **Renovação de tokens** - Refresh automático de tokens
+- **Middleware de proteção** - Rotas protegidas por autenticação
 
-- ✅ **API REST completa** com todas as rotas solicitadas
-- ✅ **Autenticação JWT** com login, registro e logout
-- ✅ **CRUD de Usuários** com validação e paginação
-- ✅ **CRUD de Posts** com filtros por tag e busca por conteúdo
-- ✅ **Banco de dados MySQL** com migrations
-- ✅ **Seeders** para popular o banco com dados de exemplo
-- ✅ **Dockerização** completa com docker-compose
-- ✅ **Documentação Swagger/OpenAPI** completa
-- ✅ **Repository Pattern** implementado
-- ✅ **Traits** para Request e Response
-- ✅ **Middleware** de autenticação JWT
-- ✅ **Rate Limiting** configurado
-- ✅ **Paginação** em todas as rotas GET
-- ✅ **Dependency Injection** implementado
+### ✅ Gerenciamento de Conteúdo
+- **CRUD de Posts** - Criar, editar, visualizar e deletar posts
+- **Sistema de Tags** - Categorização e organização de conteúdo
+- **Comentários** - Interação dos usuários com o conteúdo
+- **Busca e Filtros** - Buscar posts por título, conteúdo ou tags
+- **Paginação** - Listagens paginadas para melhor performance
 
-### 🎯 Funcionalidades Bônus
+### ✅ Gerenciamento de Usuários
+- **CRUD de Usuários** - Gerenciar usuários do sistema
+- **Controle de acesso** - Usuários ativos/inativos
+- **Perfis diferenciados** - Administradores e usuários comuns
 
-- ✅ **Validação robusta** com Form Requests
-- ✅ **Tratamento de erros** padronizado
-- ✅ **Relacionamentos** entre models bem estruturados
-- ✅ **Scopes** para filtros e buscas
-- ✅ **Estrutura de projeto** bem organizada
+### ✅ Dashboard e Estatísticas
+- **Métricas do sistema** - Estatísticas gerais do CMS
+- **Atividade recente** - Feed de atividades do sistema
+- **Tags populares** - Ranking de tags mais utilizadas
+- **Posts recentes** - Últimos posts criados
+
+### ✅ Documentação Interativa
+- **Swagger UI** - Documentação completa e interativa
+- **Testes integrados** - Testar endpoints diretamente na interface
+- **Exemplos de uso** - Request/Response para cada endpoint
 
 ## 🚀 Tecnologias Utilizadas
 
 - **Laravel 9** - Framework PHP
-- **MySQL 8.0** - Banco de dados
+- **PostgreSQL** - Banco de dados
 - **JWT Auth** - Autenticação
 - **Docker** - Containerização
 - **Nginx** - Servidor web
 - **PHP 8.1** - Linguagem de programação
-- **Composer** - Gerenciador de dependências
+- **L5-Swagger** - Documentação da API
 
 ## 📁 Estrutura do Projeto
 
 ```
 ├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── AuthController.php
-│   │   │   ├── UserController.php
-│   │   │   └── PostController.php
-│   │   ├── Middleware/
-│   │   │   └── JwtMiddleware.php
-│   │   └── Requests/
-│   │       ├── LoginRequest.php
-│   │       ├── RegisterRequest.php
-│   │       ├── UserRequest.php
-│   │       └── PostRequest.php
+│   ├── Http/Controllers/
+│   │   ├── AuthController.php      # Autenticação
+│   │   ├── UserController.php      # Gerenciamento de usuários
+│   │   ├── PostController.php      # Gerenciamento de posts
+│   │   ├── TagController.php       # Gerenciamento de tags
+│   │   └── DashboardController.php # Estatísticas e métricas
 │   ├── Models/
 │   │   ├── User.php
 │   │   ├── Post.php
-│   │   └── Tag.php
-│   ├── Repositories/
-│   │   ├── UserRepositoryInterface.php
-│   │   ├── UserRepository.php
-│   │   ├── PostRepositoryInterface.php
-│   │   └── PostRepository.php
-│   └── Traits/
-│       ├── ApiRequestTrait.php
-│       └── ApiResponseTrait.php
+│   │   ├── Tag.php
+│   │   └── Comment.php
+│   ├── Repositories/               # Repository Pattern
+│   └── Traits/                     # Traits para Request/Response
 ├── database/
-│   ├── migrations/
-│   │   ├── create_users_table.php
-│   │   ├── create_posts_table.php
-│   │   ├── create_tags_table.php
-│   │   └── create_post_tag_table.php
-│   └── seeders/
-│       ├── DatabaseSeeder.php
-│       ├── UserSeeder.php
-│       ├── TagSeeder.php
-│       └── PostSeeder.php
-├── docker/
-│   ├── nginx/
-│   │   └── default.conf
-│   └── php/
-│       └── local.ini
+│   ├── migrations/                 # Estrutura do banco
+│   └── seeders/                    # Dados de exemplo
 ├── routes/
-│   └── api.php
-├── docker-compose.yml
-├── Dockerfile
-├── swagger.yaml
-└── README.md
+│   └── api.php                     # Rotas da API
+└── docker-compose.yml              # Configuração Docker
 ```
 
 ## 🛠️ Instalação e Configuração
 
 ### Pré-requisitos
-
-- Docker e Docker Compose instalados
-- Git (para clonar o repositório)
+- Docker e Docker Compose
+- Git
 
 ### 1. Clone o repositório
-
 ```bash
 git clone <url-do-repositorio>
 cd cms-api
 ```
 
-### 2. Configure as variáveis de ambiente
-
-```bash
-cp env.example .env
-```
-
-Edite o arquivo `.env` com suas configurações:
-
-```env
-APP_NAME="CMS API"
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://localhost:8000
-
-DB_CONNECTION=mysql
-DB_HOST=db
-DB_PORT=3306
-DB_DATABASE=cms_api
-DB_USERNAME=cms_user
-DB_PASSWORD=cms_password
-
-JWT_SECRET=
-JWT_TTL=60
-JWT_REFRESH_TTL=20160
-```
-
-### 3. Execute com Docker
-
+### 2. Configure o ambiente
 ```bash
 # Subir os containers
 docker-compose up -d
@@ -141,68 +88,148 @@ docker-compose up -d
 # Instalar dependências
 docker-compose exec app composer install
 
-# Gerar chave da aplicação
-docker-compose exec app php artisan key:generate
-
-# Gerar chave JWT
-docker-compose exec app php artisan jwt:secret
-
 # Executar migrations
 docker-compose exec app php artisan migrate
 
-# Executar seeders
-docker-compose exec app php artisan db:seed
+# Popular com dados de exemplo
+docker-compose exec app php artisan db:seed --class=CmsSeeder
 ```
 
-### 4. Acessar a aplicação
-
+### 3. Acessar a aplicação
 - **API**: http://localhost:8000
-- **phpMyAdmin**: http://localhost:8080
-- **Documentação Swagger**: http://localhost:8000/api/documentation (se configurado)
+- **Documentação Swagger**: http://localhost:8000/api/documentation
+- **pgAdmin**: http://localhost:8080
 
 ## 📚 Documentação da API
 
-A documentação completa da API está disponível no arquivo `swagger.yaml` e pode ser visualizada em ferramentas como Swagger UI ou Postman.
-
 ### Endpoints Principais
 
-#### Autenticação (Sem autenticação necessária)
+#### 🔐 Autenticação
 - `POST /api/auth/login` - Login de usuário
 - `POST /api/auth/register` - Registro de usuário
+- `POST /api/auth/logout` - Logout (requer token)
+- `GET /api/auth/me` - Dados do usuário (requer token)
+- `POST /api/auth/refresh` - Renovar token (requer token)
 
-#### Autenticação (Requer token JWT)
-- `POST /api/auth/logout` - Logout de usuário
-
-#### Usuários (Requer token JWT)
-- `GET /api/users` - Listar usuários (com paginação)
+#### 👥 Usuários (requer token)
+- `GET /api/users` - Listar usuários
 - `POST /api/users` - Criar usuário
 - `GET /api/users/{id}` - Buscar usuário por ID
 - `PUT /api/users/{id}` - Atualizar usuário
 - `DELETE /api/users/{id}` - Deletar usuário
 
-#### Posts (Requer token JWT)
-- `GET /api/posts` - Listar posts (com paginação e filtros)
+#### 📝 Posts (requer token)
+- `GET /api/posts` - Listar posts (com filtros)
 - `POST /api/posts` - Criar post
 - `GET /api/posts/{id}` - Buscar post por ID
 - `PUT /api/posts/{id}` - Atualizar post
 - `DELETE /api/posts/{id}` - Deletar post
+- `POST /api/posts/{post}/comments` - Adicionar comentário
+- `DELETE /api/posts/{post}/comments/{comment}` - Deletar comentário
 
-### Filtros e Parâmetros
+#### 🏷️ Tags (requer token)
+- `GET /api/tags` - Listar tags
+- `POST /api/tags` - Criar tag
+- `GET /api/tags/{id}` - Buscar tag por ID
+- `PUT /api/tags/{id}` - Atualizar tag
+- `DELETE /api/tags/{id}` - Deletar tag
+
+#### 📊 Dashboard (requer token)
+- `GET /api/dashboard/stats` - Estatísticas do sistema
+- `GET /api/dashboard/activity` - Atividade recente
+
+#### 🔧 Utilitários
+- `GET /api/health` - Health check
+- `GET /api/ping` - Ping
+
+### Parâmetros de Filtro
 
 #### Posts
 - `?per_page=15` - Número de itens por página
-- `?tag=node` - Filtrar por tag específica
+- `?tag=nome-da-tag` - Filtrar por tag específica
 - `?query=palavra-chave` - Buscar por título ou conteúdo
-
-#### Usuários
-- `?per_page=15` - Número de itens por página
 
 ## 🔐 Autenticação
 
-A API utiliza JWT (JSON Web Token) para autenticação. Para acessar rotas protegidas:
+A API utiliza JWT (JSON Web Token) para autenticação:
 
-1. Faça login ou registro para obter um token
-2. Inclua o token no header `Authorization: Bearer {seu-token}`
+1. **Registre-se** ou **faça login** para obter um token
+2. **Inclua o token** no header: `Authorization: Bearer {seu-token}`
+3. **Use o token** para acessar rotas protegidas
+
+### Usuários de Exemplo
+- **Admin**: `admin@cms.com` / `admin123`
+- **Editor**: `editor@cms.com` / `editor123`
+- **Usuário**: `maria@example.com` / `123456`
+
+## 🎨 Características do CMS
+
+### Para Administradores
+- Gerenciar usuários do sistema
+- Criar e editar posts
+- Moderar comentários
+- Organizar conteúdo por tags
+- Visualizar estatísticas do sistema
+
+### Para Usuários
+- Registrar-se no sistema
+- Comentar em posts
+- Buscar conteúdo
+- Navegar por categorias
+
+## 🚀 Deploy
+
+O sistema está configurado para deploy com Docker:
+
+```bash
+# Produção
+docker-compose -f docker-compose.yml up -d
+
+# Railway
+docker-compose -f docker-compose.railway.yml up -d
+```
+
+## 📈 Performance
+
+- **Paginação** em todas as listagens
+- **Índices** no banco de dados
+- **Cache** de views e rotas
+- **Rate Limiting** configurado
+- **CORS** configurado
+
+## 🔧 Desenvolvimento
+
+### Executar testes
+```bash
+docker-compose exec app php artisan test
+```
+
+### Limpar cache
+```bash
+docker-compose exec app php artisan cache:clear
+docker-compose exec app php artisan config:clear
+```
+
+### Regenerar documentação
+```bash
+docker-compose exec app php artisan l5-swagger:generate
+```
+
+## 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
+
+## 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma branch para sua feature
+3. Commit suas mudanças
+4. Push para a branch
+5. Abra um Pull Request
+
+## 📞 Suporte
+
+Para suporte, entre em contato através dos issues do GitHub ou email.
 3. O token expira em 60 minutos por padrão
 
 ### Exemplo de uso:
