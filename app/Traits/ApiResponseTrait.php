@@ -34,18 +34,27 @@ trait ApiResponseTrait
 
     protected function paginatedResponse($data, string $message = 'Success'): JsonResponse
     {
-        return response()->json([
-            'message' => $message,
-            'data' => $data->items(),
-            'pagination' => [
-                'current_page' => $data->currentPage(),
-                'last_page' => $data->lastPage(),
-                'per_page' => $data->perPage(),
-                'total' => $data->total(),
-                'from' => $data->firstItem(),
-                'to' => $data->lastItem(),
-            ]
-        ]);
+        // Se for uma Collection simples, retornar sem paginação
+        if (method_exists($data, 'items')) {
+            return response()->json([
+                'message' => $message,
+                'data' => $data->items(),
+                'pagination' => [
+                    'current_page' => $data->currentPage(),
+                    'last_page' => $data->lastPage(),
+                    'per_page' => $data->perPage(),
+                    'total' => $data->total(),
+                    'from' => $data->firstItem(),
+                    'to' => $data->lastItem(),
+                ]
+            ]);
+        } else {
+            // Se for uma Collection simples, retornar os dados diretamente
+            return response()->json([
+                'message' => $message,
+                'data' => $data
+            ]);
+        }
     }
 
     protected function validationErrorResponse($errors, string $message = 'Validation failed'): JsonResponse

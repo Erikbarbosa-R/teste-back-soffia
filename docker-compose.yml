@@ -18,9 +18,9 @@ services:
       - DB_DATABASE=Soffia-database
       - DB_USERNAME=postgres
       - DB_PASSWORD=Erikbarbosa12
-      - JWT_SECRET=testeeee
+      - JWT_SECRET=nP6QlImMGm1qxKchPY2IKOIwkMwtNTKzSU81he9dFil9yX0autVvmboKTzmr28HY
     volumes:
-      - ./:/var/www
+      - ./:/var/wwwcome
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     depends_on:
       - db
