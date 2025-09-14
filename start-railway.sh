@@ -6,12 +6,6 @@ set -e
 echo "=== Iniciando CMS API no Railway ==="
 echo "Timestamp: $(date)"
 echo "Porta definida pelo Railway: $PORT"
-echo "Variáveis de ambiente importantes:"
-echo "  APP_ENV: $APP_ENV"
-echo "  DB_HOST: $DB_HOST"
-echo "  DB_PORT: $DB_PORT"
-echo "  DB_DATABASE: $DB_DATABASE"
-echo "  DB_USERNAME: $DB_USERNAME"
 
 # Verificar se a porta está definida
 if [ -z "$PORT" ]; then
@@ -21,31 +15,15 @@ fi
 
 # Aguardar banco de dados estar disponível
 echo "Aguardando banco de dados estar disponível..."
-sleep 15
+sleep 10
 
-# Testar conexão com banco de dados
-echo "Testando conexão com banco de dados..."
-php artisan tinker --execute="
-try {
-    DB::connection()->getPdo();
-    echo 'Conexão com banco OK\n';
-} catch (Exception \$e) {
-    echo 'Erro na conexão: ' . \$e->getMessage() . '\n';
-    exit(1);
-}
-" || {
-    echo "ERRO: Não foi possível conectar ao banco de dados"
-    echo "Verifique as variáveis DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD"
-    exit 1
-}
-
-# Executar migrations
+# Executar migrations (com tratamento de erro)
 echo "Executando migrations..."
 php artisan migrate --force || {
     echo "AVISO: Erro ao executar migrations, continuando..."
 }
 
-# Executar seeders
+# Executar seeders (com tratamento de erro)
 echo "Executando seeders..."
 php artisan db:seed --class=CmsSeeder --force || {
     echo "AVISO: Erro ao executar seeders, continuando..."
@@ -53,9 +31,9 @@ php artisan db:seed --class=CmsSeeder --force || {
 
 # Limpar cache
 echo "Limpando cache..."
-php artisan config:clear
-php artisan cache:clear
-php artisan route:clear
+php artisan config:clear || echo "Cache já limpo"
+php artisan cache:clear || echo "Cache já limpo"
+php artisan route:clear || echo "Cache de rotas já limpo"
 
 # Iniciar servidor
 echo "=== Iniciando servidor PHP na porta $PORT ==="

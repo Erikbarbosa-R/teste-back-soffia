@@ -13,7 +13,7 @@ services:
       - APP_ENV=production
       - APP_DEBUG=false
       - DB_CONNECTION=pgsql
-      - DB_HOST=yamabiko.proxy.rlwy.net
+      - DB_HOST=containers-us-west-123.railway.app
       - DB_PORT=23644
       - DB_DATABASE=railway
       - DB_USERNAME=postgres
