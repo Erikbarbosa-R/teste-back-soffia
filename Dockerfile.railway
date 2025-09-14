@@ -1,4 +1,4 @@
-FROM php:8.1-cli
+FROM php:8.1-fpm
 
 WORKDIR /var/www
 
@@ -9,7 +9,9 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libpq-dev \
-    postgresql-client
+    postgresql-client \
+    nginx \
+    supervisor
 
 # Instalar extensões PHP necessárias
 RUN docker-php-ext-install pdo pdo_pgsql
@@ -36,6 +38,41 @@ RUN chmod -R 775 /var/www/storage
 RUN chown -R www-data:www-data /var/www/bootstrap/cache
 RUN chmod -R 775 /var/www/bootstrap/cache
 
-EXPOSE 8000
+# Configurar Nginx para Railway
+RUN echo 'server { \
+    listen 8080; \
+    root /var/www/public; \
+    index index.php index.html; \
+    location / { \
+        try_files $uri $uri/ /index.php?$query_string; \
+    } \
+    location ~ \.php$ { \
+        fastcgi_pass 127.0.0.1:9000; \
+        fastcgi_index index.php; \
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; \
+        include fastcgi_params; \
+    } \
+}' > /etc/nginx/sites-available/default
 
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+# Configurar Supervisor
+RUN echo '[supervisord] \
+nodaemon=true \
+user=root \
+logfile=/var/log/supervisor/supervisord.log \
+pidfile=/var/run/supervisord.pid \
+[program:php-fpm] \
+command=php-fpm \
+autostart=true \
+autorestart=true \
+stderr_logfile=/var/log/supervisor/php-fpm.err.log \
+stdout_logfile=/var/log/supervisor/php-fpm.out.log \
+[program:nginx] \
+command=nginx -g "daemon off;" \
+autostart=true \
+autorestart=true \
+stderr_logfile=/var/log/supervisor/nginx.err.log \
+stdout_logfile=/var/log/supervisor/nginx.out.log' > /etc/supervisor/conf.d/supervisord.conf
+
+EXPOSE 8080
+
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

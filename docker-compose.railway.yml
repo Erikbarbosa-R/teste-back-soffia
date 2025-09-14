@@ -22,7 +22,7 @@ services:
       - CACHE_DRIVER=array
       - SESSION_DRIVER=array
     ports:
-      - "8001:8000"
+      - "8080:8080"
     volumes:
       - ./:/var/www
     networks:
