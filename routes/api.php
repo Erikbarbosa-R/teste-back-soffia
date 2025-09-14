@@ -77,6 +77,15 @@ Route::get('/health', function () {
     return response()->json(['status' => 'healthy'], 200);
 });
 
+// Rota de fallback para documentação
+Route::get('/docs', function () {
+    return redirect('/api/documentation');
+});
+
+Route::get('/swagger', function () {
+    return redirect('/api/documentation');
+});
+
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);

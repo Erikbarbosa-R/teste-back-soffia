@@ -16,4 +16,4 @@ services:
     volumes:
       - ./:/var/www
     working_dir: /var/www
-    command: php -S 0.0.0.0:8000 -t public
+    command: php -S 127.0.0.1 -t public

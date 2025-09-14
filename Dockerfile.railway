@@ -33,6 +33,9 @@ RUN php artisan jwt:secret --force
 # Configurar permissões
 RUN chmod -R 775 /var/www/storage
 RUN chmod -R 775 /var/www/bootstrap/cache
+RUN chmod -R 775 /var/www/public
+RUN mkdir -p /var/www/storage/api-docs
+RUN chmod -R 775 /var/www/storage/api-docs
 
 # Copiar script de inicialização
 COPY start-railway.sh /var/www/start.sh

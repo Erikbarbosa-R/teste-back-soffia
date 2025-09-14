@@ -45,6 +45,10 @@ php artisan config:clear || echo "Cache já limpo"
 php artisan cache:clear || echo "Cache já limpo"
 php artisan route:clear || echo "Cache de rotas já limpo"
 
+# Gerar documentação Swagger
+echo "Gerando documentação Swagger..."
+php artisan l5-swagger:generate || echo "AVISO: Erro ao gerar documentação Swagger"
+
 # Iniciar servidor
 echo "=== Iniciando servidor PHP na porta $PORT ==="
 echo "URL de acesso: http://0.0.0.0:$PORT"
