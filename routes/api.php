@@ -47,6 +47,36 @@ Route::get('ping', function () {
     return response()->json(['pong' => true], 200);
 });
 
+/**
+ * @OA\Get(
+ *     path="/",
+ *     summary="Root Health Check",
+ *     description="Endpoint raiz para health check do Railway",
+ *     tags={"Utilitários"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="API funcionando",
+ *         @OA\JsonContent(
+ *             @OA\Property(property="status", type="string", example="ok"),
+ *             @OA\Property(property="message", type="string", example="CMS API funcionando"),
+ *             @OA\Property(property="timestamp", type="string", example="2023-01-01T00:00:00.000000Z")
+ *         )
+ *     )
+ * )
+ */
+Route::get('/', function () {
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'CMS API funcionando',
+        'timestamp' => now()
+    ], 200);
+});
+
+// Health check adicional para Railway
+Route::get('/health', function () {
+    return response()->json(['status' => 'healthy'], 200);
+});
+
 
 Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);

@@ -34,22 +34,8 @@ RUN php artisan jwt:secret --force
 RUN chmod -R 775 /var/www/storage
 RUN chmod -R 775 /var/www/bootstrap/cache
 
-# Criar script de inicialização
-RUN echo '#!/bin/bash\n\
-echo "Iniciando CMS API..."\n\
-\n\
-# Aguardar um pouco para o banco estar pronto\n\
-sleep 5\n\
-\n\
-# Executar migrations se necessário\n\
-php artisan migrate --force || echo "Migrations já executadas"\n\
-\n\
-# Executar seeders se necessário\n\
-php artisan db:seed --class=CmsSeeder --force || echo "Seeders já executados"\n\
-\n\
-echo "Iniciando servidor na porta 8080..."\n\
-php -S 0.0.0.0:8080 -t public' > /var/www/start.sh
-
+# Copiar script de inicialização
+COPY start-railway.sh /var/www/start.sh
 RUN chmod +x /var/www/start.sh
 
 EXPOSE 8080
