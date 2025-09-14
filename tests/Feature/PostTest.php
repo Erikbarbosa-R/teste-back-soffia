@@ -18,7 +18,6 @@ class PostTest extends TestCase
     {
         parent::setUp();
         
-        // Create a user and authenticate
         $this->user = User::factory()->create();
         $this->token = auth('api')->login($this->user);
     }

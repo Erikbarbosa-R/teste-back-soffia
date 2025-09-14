@@ -9,11 +9,6 @@ use App\Models\Tag;
 
 class PostSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         $user = User::first();
@@ -46,7 +41,6 @@ class PostSeeder extends Seeder
                 'author_id' => $postData['author_id'],
             ]);
 
-            // Attach tags
             $tagIds = [];
             foreach ($postData['tags'] as $tagName) {
                 $tag = Tag::where('name', $tagName)->first();

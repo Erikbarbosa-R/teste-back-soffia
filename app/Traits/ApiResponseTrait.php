@@ -34,7 +34,6 @@ trait ApiResponseTrait
 
     protected function paginatedResponse($data, string $message = 'Success'): JsonResponse
     {
-        // Se for um LengthAwarePaginator, retornar com paginação
         if (method_exists($data, 'items')) {
             return response()->json([
                 'message' => $message,
@@ -49,7 +48,6 @@ trait ApiResponseTrait
                 ]
             ]);
         } else {
-            // Se for uma Collection simples, retornar os dados diretamente
             return response()->json([
                 'message' => $message,
                 'data' => $data

@@ -58,7 +58,6 @@ class AuthController extends Controller
         try {
             $userData = $request->validated();
             
-            // Verificar se o email já existe manualmente
             $existingUser = $this->userRepository->findByEmail($userData['email']);
             if ($existingUser) {
                 return response()->json([
@@ -74,7 +73,6 @@ class AuthController extends Controller
             $userData['password'] = Hash::make($userData['password']);
             $user = $this->userRepository->create($userData);
 
-            // Gerar token JWT para o usuário recém-criado
             $token = JWTAuth::fromUser($user);
 
             return response()->json([
