@@ -26,7 +26,7 @@ class PostRequest extends FormRequest
         return [
             'title' => 'sometimes|required|string|max:255',
             'content' => 'sometimes|required|string',
-            'author' => 'sometimes|required|integer|exists:users,id',
+            'author' => 'sometimes|required|uuid|exists:users,id',
             'tags' => 'sometimes|array',
             'tags.*' => 'string|max:50',
         ];
@@ -44,7 +44,7 @@ class PostRequest extends FormRequest
             'title.max' => 'O título não pode ter mais de 255 caracteres.',
             'content.required' => 'O campo conteúdo é obrigatório.',
             'author.required' => 'O campo autor é obrigatório.',
-            'author.integer' => 'O autor deve ser um ID válido.',
+            'author.integer' => 'O autor deve ser um UUID válido.',
             'author.exists' => 'O autor selecionado não existe.',
             'tags.array' => 'As tags devem ser um array.',
             'tags.*.string' => 'Cada tag deve ser uma string.',

@@ -7,10 +7,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasUuids;
 
     /**
      * The attributes that are mass assignable.
@@ -44,6 +45,14 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'is_valid' => 'boolean',
     ];
+
+    /**
+     * Get the value of is_valid attribute.
+     */
+    public function getIsValidAttribute($value)
+    {
+        return $value !== null ? (bool) $value : true;
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
