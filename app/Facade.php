@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Support\Facades\Facade;
 
-class Facade extends Facade
+class AppFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
