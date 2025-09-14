@@ -20,7 +20,7 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->all();
     }
 
-    public function find(int $id): ?User
+    public function find(string $id): ?User
     {
         return $this->model->find($id);
     }
@@ -30,7 +30,7 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->create($data);
     }
 
-    public function update(int $id, array $data): ?User
+    public function update(string $id, array $data): ?User
     {
         $user = $this->find($id);
         if ($user) {
@@ -40,7 +40,7 @@ class UserRepository implements UserRepositoryInterface
         return null;
     }
 
-    public function delete(int $id): bool
+    public function delete(string $id): bool
     {
         $user = $this->find($id);
         if ($user) {

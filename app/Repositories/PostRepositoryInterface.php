@@ -9,10 +9,10 @@ use Illuminate\Pagination\LengthAwarePaginator;
 interface PostRepositoryInterface
 {
     public function all(): Collection;
-    public function find(int $id): ?Post;
+    public function find(string $id): ?Post;
     public function create(array $data): Post;
-    public function update(int $id, array $data): ?Post;
-    public function delete(int $id): bool;
+    public function update(string $id, array $data): ?Post;
+    public function delete(string $id): bool;
     public function paginate(int $perPage = 15): LengthAwarePaginator;
     public function findByTag(string $tag): Collection;
     public function search(string $query): Collection;

@@ -20,9 +20,9 @@ class PostRepository implements PostRepositoryInterface
         return $this->model->with(['author', 'tags'])->get();
     }
 
-    public function find(int $id): ?Post
+    public function find(string $id): ?Post
     {
-        return $this->model->with(['author', 'tags'])->find($id);
+        return $this->model->with(['author', 'tags', 'comments.user'])->find($id);
     }
 
     public function create(array $data): Post
@@ -36,7 +36,7 @@ class PostRepository implements PostRepositoryInterface
         return $post->load(['author', 'tags']);
     }
 
-    public function update(int $id, array $data): ?Post
+    public function update(string $id, array $data): ?Post
     {
         $post = $this->find($id);
         if ($post) {
@@ -51,7 +51,7 @@ class PostRepository implements PostRepositoryInterface
         return null;
     }
 
-    public function delete(int $id): bool
+    public function delete(string $id): bool
     {
         $post = $this->find($id);
         if ($post) {

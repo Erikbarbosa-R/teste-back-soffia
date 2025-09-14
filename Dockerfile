@@ -1,15 +1,14 @@
-FROM php:8.1-cli
+FROM php:8.1-fpm
 
 WORKDIR /var/www
 
-# Instalar dependências básicas e PostgreSQL
+# Instalar dependências básicas
 RUN apt-get update && apt-get install -y \
     git \
     curl \
     zip \
     unzip \
-    libpq-dev \
-    postgresql-client
+    libpq-dev
 
 # Instalar extensões PHP necessárias
 RUN docker-php-ext-install pdo pdo_pgsql
@@ -30,12 +29,11 @@ RUN if [ ! -f .env ]; then cp .env.example .env; fi
 RUN php artisan key:generate --force
 RUN php artisan jwt:secret --force
 
-# Configurar permissões para storage
-RUN chown -R www-data:www-data /var/www/storage
+# Configurar permissões
+RUN chown -R www-data:www-data /var/www
 RUN chmod -R 775 /var/www/storage
-RUN chown -R www-data:www-data /var/www/bootstrap/cache
 RUN chmod -R 775 /var/www/bootstrap/cache
 
-EXPOSE 8000
+EXPOSE 9000
 
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+CMD ["php-fpm"]

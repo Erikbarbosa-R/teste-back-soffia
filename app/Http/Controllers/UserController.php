@@ -62,7 +62,7 @@ class UserController extends Controller
         }
     }
 
-    public function show(int $id): JsonResponse
+    public function show(string $id): JsonResponse
     {
         $user = $this->userRepository->find($id);
 
@@ -79,7 +79,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(UserRequest $request, int $id): JsonResponse
+    public function update(UserRequest $request, string $id): JsonResponse
     {
         try {
             $userData = $request->validated();
@@ -107,7 +107,7 @@ class UserController extends Controller
         }
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(string $id): JsonResponse
     {
         $deleted = $this->userRepository->delete($id);
 

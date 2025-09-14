@@ -29,12 +29,15 @@ class AuthController extends Controller
             $credentials = $request->only('email', 'password');
             
             if (!$token = JWTAuth::attempt($credentials)) {
-                return $this->errorResponse('Credenciais inválidas.', 401);
+                return response()->json([
+                    'message' => 'Credenciais inválidas. Verifique seu email e senha.'
+                ], 401);
             }
 
             $user = JWTAuth::user();
 
-            return $this->successResponse([
+            return response()->json([
+                'message' => 'Login realizado com sucesso.',
                 'user' => [
                     'id' => $user->id,
                     'nome' => $user->nome,
@@ -42,10 +45,8 @@ class AuthController extends Controller
                     'telefone' => $user->telefone,
                     'is_valid' => $user->is_valid,
                 ],
-                'token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => JWTAuth::factory()->getTTL() * 60
-            ], 'Login realizado com sucesso.');
+                'token' => $token
+            ]);
 
         } catch (\Exception $e) {
             return $this->errorResponse('Erro interno do servidor.', 500);
@@ -56,10 +57,28 @@ class AuthController extends Controller
     {
         try {
             $userData = $request->validated();
+            
+            // Verificar se o email já existe manualmente
+            $existingUser = $this->userRepository->findByEmail($userData['email']);
+            if ($existingUser) {
+                return response()->json([
+                    'message' => 'The given data was invalid.',
+                    'errors' => [
+                        'email' => [
+                            'Este email já está cadastrado em nossa base de dados. Por favor, use outro email ou faça login.'
+                        ]
+                    ]
+                ], 422);
+            }
+            
             $userData['password'] = Hash::make($userData['password']);
             $user = $this->userRepository->create($userData);
 
-            return $this->successResponse([
+            // Gerar token JWT para o usuário recém-criado
+            $token = JWTAuth::fromUser($user);
+
+            return response()->json([
+                'message' => 'Usuário registrado com sucesso.',
                 'user' => [
                     'id' => $user->id,
                     'nome' => $user->nome,
@@ -67,8 +86,8 @@ class AuthController extends Controller
                     'telefone' => $user->telefone,
                     'is_valid' => $user->is_valid,
                 ],
-                'message' => 'Usuário registrado com sucesso. Faça login para obter o token de acesso.'
-            ], 'Usuário registrado com sucesso.', 201);
+                'token' => $token
+            ], 201);
 
         } catch (\Exception $e) {
             return $this->errorResponse('Erro ao cadastrar o usuário. Verifique os dados fornecidos.', 400);

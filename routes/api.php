@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 
 Route::get('health', function () {
     return response()->json(['status' => 'ok', 'timestamp' => now()], 200);
@@ -75,4 +76,7 @@ Route::middleware(['jwt.auth'])->group(function () {
     Route::apiResource('users', UserController::class);
 
     Route::apiResource('posts', PostController::class);
+
+    Route::post('posts/{post}/comments', [PostController::class, 'addComment']);
+    Route::delete('posts/{post}/comments/{comment}', [PostController::class, 'deleteComment']);
 });
