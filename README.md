@@ -355,10 +355,4 @@ Para fazer deploy em produção:
 
 Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
 
-## 📞 Suporte
-
-Para suporte, entre em contato através do email: dev@example.com
-
----
-
 **Desenvolvido com ❤️ usando Laravel e Docker**
