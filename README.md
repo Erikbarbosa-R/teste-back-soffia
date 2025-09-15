@@ -97,7 +97,7 @@ docker-compose exec app php artisan db:seed --class=CmsSeeder
 
 ### 3. Acessar a aplicação
 - **API**: http://localhost:8000
-- **Documentação Swagger**: http://localhost:8000/api/documentation
+- **Documentação Swagger**: [http://localhost:8000/api/documentation](https://teste-back-soffia-production.up.railway.app/api/documentation)
 - **pgAdmin**: http://localhost:8080
 
 ## 📚 Documentação da API
